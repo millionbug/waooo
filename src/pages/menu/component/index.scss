@@ -1,0 +1,34 @@
+$blue: #4FCC8C;
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+.blue-circle {
+    border: 1px $blue solid;
+    border-radius: 50%;
+}
+
+.x-line {
+    width: 100vw;
+    height: 1px;
+    background: $blue;
+    position: absolute;
+    top: 50%;
+}
+
+.y-line {
+    position: absolute;
+    background: $blue;
+    width: 1px;
+    height: 100vh;
+    left: 50vw;
+}
+
+.btn-option {
+    z-index: 100;    
+}

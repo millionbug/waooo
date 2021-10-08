@@ -1,6 +1,4 @@
 import Taro from "@tarojs/taro";
-export function fetchJson<T>(url: string): Promise<T> {
-    return Taro.request({
-        url
-    }).then(res => res.data);
+export function fetchJson<T>(options: Taro.request.Option): Promise<T> {
+    return Taro.request(options).then(res => res.data);
 };

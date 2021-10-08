@@ -1,3 +1,4 @@
+const path = require('path');
 const config = {
   projectName: 'waooo',
   date: '2021-9-28',
@@ -11,6 +12,9 @@ const config = {
   outputRoot: 'dist',
   plugins: [],
   defineConstants: {
+  },
+  alias: {
+    "@utils": path.resolve(__dirname, '..', 'src/utils')
   },
   copy: {
     patterns: [

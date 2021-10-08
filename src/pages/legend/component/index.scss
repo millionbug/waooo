@@ -1,0 +1,31 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100vh;
+    background-image: url('https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fhiphotos.baidu.com%2Ffeed%2Fpic%2Fitem%2F00e93901213fb80e7f4c242e3cd12f2eb83894ad.jpg&refer=http%3A%2F%2Fhiphotos.baidu.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1635411605&t=40c26aaed36d5cef2088e80beaac2884');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.des-text {
+    color: white;
+    background-color: #e9e2c8;
+    border: 2px solid #d4b74e;
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
+
+.start-btn {
+    color: white;
+    font-size: 2.5rem;
+    border-radius: 4px;
+    background: #d4b74e;
+}
+
+.role-head {
+    width: 91px;
+    height: 91px;
+}
