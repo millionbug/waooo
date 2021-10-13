@@ -1,12 +1,14 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, CSSProperties } from 'react';
 import { View, Text, Image } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import { FetchPoi, Poi } from '../service/poi';
-import { forNum } from '@utils';
+import { forNum, computeRotage } from '@utils';
 import './index.scss';
 
+type Location = Pick<Taro.getLocation.SuccessCallbackResult, 'latitude' | 'longitude'> | null;
+
 export default function Index() {
-  const [location, setLocation] = useState<Pick<Taro.getLocation.SuccessCallbackResult, 'latitude' | 'longitude'> | null>(null);
+  const [location, setLocation] = useState<Location>(null);
   const [pois, setPois] = useState<Poi[]>([]);
   const getLocation = useCallback(() => {
     Taro.getLocation({
@@ -36,10 +38,53 @@ export default function Index() {
     }
   }, [location?.latitude, location?.longitude]);
 
-  const renderPois = useCallback((pois: Poi[]) => {
-    return pois.map(poi => {
+  const renderPois = useCallback((pois: Poi[], location: Location) => {
+    let maxX, maxY;
+    const luckNum = Math.floor(Math.random() * pois.length);
+    const poisMap = pois.map(poi => {
+      const poiLocation = poi.location;
+      // 注意：后端返回的顺序竟然是反的
+      const [longitude, latitude] = poiLocation.split(',').map((value) => {
+        return Number(value) * 1000000;
+      });
+      const distance = Number(poi.distance);
+      const {x, y} = computeRotage({
+        latitude: Number(location?.latitude) * 1000000,
+        longitude: Number(location?.longitude) * 1000000
+      }, {
+        latitude,
+        longitude
+      }, distance);
+      const absX = Math.abs(x);
+      const absY = Math.abs(y);
+      maxX = maxX > absX ? maxX : absX;
+      maxY = maxY > absY ? maxY : absY;
 
-      return <Image key={poi.name} src={poi.photos[0]?.url || ''} />
+      return {
+        x,
+        y,
+        name: poi.name,
+        src: poi.photos[0]?.url || ''
+      }
+    });
+    const ruleX = 80 / 2 / maxX;
+    const ruleY = 80 / 2 / maxY;
+    console.log(luckNum);
+    return poisMap.map((poi, index) => {
+      const y = ruleY * poi.y;
+      const x = ruleX * poi.x;
+      const style: CSSProperties = {
+        position: 'absolute',
+        top: (50 + y) + 'vh',
+        left: (50 + x) + 'vw'
+      };
+      if (index === luckNum) {
+        return <View style={{...style, zIndex: 1000}}>
+          <Image className="poi-photo" key={poi.name} src={poi.src} />
+          <Text>!!!{poi.name}</Text>
+        </View>
+      }
+      return <Image className="poi-photo" style={style} key={poi.name} src={poi.src} />;
     })
   }, []);
 
@@ -71,7 +116,7 @@ export default function Index() {
       <View className="y-line">
       </View>
       {renderCircle()}
-      {pois.length && renderPois(pois)}
+      {pois.length && renderPois(pois, location)}
     </View>
   );
 }

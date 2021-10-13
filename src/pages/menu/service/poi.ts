@@ -6,7 +6,7 @@ export interface Poi {
   name: string;
   address: string;
   location: string;
-  distance: number;
+  distance: string;
   tel: number;
   photos: ({
     title: string;
